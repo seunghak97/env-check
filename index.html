@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>사업장 환경진단</title>
+<meta name="description" content="이웨이 주식회사가 만든 대기·폐수 배출시설 자가진단 도구 — 종별, 허가/신고, 측정주기, 환경기술인 자격, 설치신고 절차까지 한번에 확인합니다.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2f6f62">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="환경진단">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #202823;
+    --ink-dim: #6b7268;
+    --paper: #f6f4ec;
+    --surface: #ffffff;
+    --surface-2: #edeade;
+    --line: #ddd6c2;
+    --accent: #2f6f62;
+    --accent-ink: #ffffff;
+    --accent-soft: #e2ece7;
+    --copper: #a9702f;
+    --copper-soft: #f3e6d3;
+    --good: #2f6f4a;
+    --good-soft: #e1efe4;
+    --warn: #9a6a1f;
+    --warn-soft: #f5ecd8;
+    --critical: #a3432f;
+    --critical-soft: #f6e3dd;
+    --shadow: 0 8px 28px rgba(32, 40, 35, 0.10);
+    --radius: 14px;
+    --serif: "Gowun Batang", "Noto Serif KR", serif;
+    --sans: "Gowun Dodum", "Noto Sans KR", -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #eae6d9;
+      --ink-dim: #a29c8a;
+      --paper: #191d19;
+      --surface: #22271f;
+      --surface-2: #262b21;
+      --line: #3a3d33;
+      --accent: #6fb39f;
+      --accent-ink: #10201a;
+      --accent-soft: #223530;
+      --copper: #d3a35e;
+      --copper-soft: #3a2f1c;
+      --good: #7fbd8f;
+      --good-soft: #203024;
+      --warn: #d9b45c;
+      --warn-soft: #362c17;
+      --critical: #e08b76;
+      --critical-soft: #3a221c;
+      --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eae6d9; --ink-dim: #a29c8a; --paper: #191d19; --surface: #22271f; --surface-2: #262b21;
+    --line: #3a3d33; --accent: #6fb39f; --accent-ink: #10201a; --accent-soft: #223530;
+    --copper: #d3a35e; --copper-soft: #3a2f1c; --good: #7fbd8f; --good-soft: #203024;
+    --warn: #d9b45c; --warn-soft: #362c17; --critical: #e08b76; --critical-soft: #3a221c;
+    --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans); }
+  h1, h2, h3 { font-family: var(--serif); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 60px; }
+
+  /* ---------- Header ---------- */
+  .brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  .brand-mark {
+    width: 38px; height: 38px; border-radius: 10px; background: var(--accent); color: var(--accent-ink);
+    display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; font-size: 17px; flex-shrink: 0;
+  }
+  .brand-name { font-size: 14px; font-weight: 700; letter-spacing: 0.02em; color: var(--ink-dim); }
+
+  .hero { margin-bottom: 30px; }
+  .hero h1 { font-size: clamp(26px, 5vw, 38px); font-weight: 700; line-height: 1.25; }
+  .hero .sub { margin-top: 10px; font-size: 15px; color: var(--ink-dim); line-height: 1.6; max-width: 62ch; }
+
+  /* ---------- Tabs ---------- */
+  .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); margin-bottom: 26px; overflow-x: auto; }
+  .tab-btn {
+    font: inherit; font-family: var(--sans); font-size: 14.5px; font-weight: 700; color: var(--ink-dim);
+    background: none; border: none; padding: 12px 6px; cursor: pointer; white-space: nowrap;
+    border-bottom: 2.5px solid transparent; margin-bottom: -1px; transition: color .15s;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn .n { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 11px; text-align: center; line-height: 18px; margin-right: 6px; }
+  .tab-btn.active .n { background: var(--accent); color: var(--accent-ink); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .subtab-btn {
+    font: inherit; font-family: var(--sans); font-size: 13.5px; font-weight: 700; color: var(--ink-dim);
+    background: var(--surface-2); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 16px; cursor: pointer;
+  }
+  .subtab-btn.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .subpanel { display: none; }
+  .subpanel.active { display: block; }
+
+  .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 24px; align-items: start; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* ---------- Form card ---------- */
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow);
+  }
+  .field { margin-bottom: 20px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label.q { display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 9px; line-height: 1.4; }
+  .field .hint { font-size: 12px; color: var(--ink-dim); margin-top: 5px; line-height: 1.5; }
+
+  .num-input-row { display: flex; align-items: center; gap: 10px; }
+  input[type="number"] {
+    font: inherit; font-family: var(--sans); font-size: 16px; width: 100%; padding: 10px 12px;
+    border: 1.5px solid var(--line); border-radius: 9px; background: var(--paper); color: var(--ink);
+  }
+  input[type="number"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .unit { font-size: 13px; color: var(--ink-dim); flex-shrink: 0; }
+
+  .seg { display: flex; border: 1.5px solid var(--line); border-radius: 9px; overflow: hidden; }
+  .seg label {
+    flex: 1; text-align: center; padding: 9px 8px; font-size: 13.5px; cursor: pointer;
+    background: var(--paper); color: var(--ink-dim); transition: background .12s, color .12s; border-right: 1.5px solid var(--line);
+  }
+  .seg label:last-child { border-right: none; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg input:checked + label,
+  .seg label.checked { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+  .seg label:focus-within { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  select {
+    font: inherit; font-family: var(--sans); font-size: 14.5px; width: 100%; padding: 10px 12px;
+    border: 1.5px solid var(--line); border-radius: 9px; background: var(--paper); color: var(--ink);
+  }
+
+  /* ---------- Result panel ---------- */
+  .result-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; box-shadow: var(--shadow); position: sticky; top: 16px;
+  }
+  .result-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
+  .result-head h2 { font-size: 17px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .chip { font-size: 11.5px; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); color: var(--ink-dim); font-weight: 700; }
+
+  .verdict-list { display: flex; flex-direction: column; gap: 10px; }
+  .verdict {
+    display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 3px 10px;
+    padding: 12px 14px 12px 16px; border-radius: 10px; border: 1px solid var(--line); border-left: 4px solid var(--line);
+    background: var(--paper);
+  }
+  .verdict.good { border-left-color: var(--good); }
+  .verdict.warn { border-left-color: var(--warn); }
+  .verdict.critical { border-left-color: var(--critical); }
+  .verdict.neutral { border-left-color: var(--accent); }
+  .verdict .icon { font-size: 16px; line-height: 1.3; grid-row: 1; }
+  .verdict .label { font-size: 12.5px; color: var(--ink-dim); font-weight: 700; grid-row: 1; }
+  .verdict .value { font-size: 15.5px; font-weight: 700; grid-column: 1 / -1; }
+  .verdict.good .value { color: var(--good); }
+  .verdict.warn .value { color: var(--warn); }
+  .verdict.critical .value { color: var(--critical); }
+  .verdict.neutral .value { color: var(--ink); }
+  .verdict .basis { grid-column: 1 / -1; font-size: 11.5px; color: var(--ink-dim); margin-top: 2px; line-height: 1.5; }
+  .badge { display: inline-block; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+  .badge.good { background: var(--good-soft); color: var(--good); }
+  .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.critical { background: var(--critical-soft); color: var(--critical); }
+  .badge.neutral { background: var(--accent-soft); color: var(--accent); }
+
+  .divider { height: 1px; background: var(--line); margin: 18px 0; border: none; }
+
+  .footnote {
+    margin-top: 16px; font-size: 12px; line-height: 1.6; color: var(--ink-dim);
+    background: var(--copper-soft); border-left: 3px solid var(--copper); padding: 10px 12px; border-radius: 0 8px 8px 0;
+  }
+  .footnote b { color: var(--ink); }
+
+  .contact-bar {
+    margin-top: 36px; padding: 18px 20px; border-radius: var(--radius); background: var(--accent-soft);
+    border: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .contact-bar .t { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .contact-bar .d { font-size: 12.5px; color: var(--ink-dim); margin-top: 3px; }
+  .contact-bar .phone { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--accent); }
+
+  table.wide-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+  table.wide-table th, table.wide-table td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; }
+  table.wide-table th { background: var(--surface-2); font-weight: 700; }
+  .table-scroll { overflow-x: auto; }
+
+  .example-note { font-size: 11.5px; color: var(--ink-dim); margin-top: 8px; font-style: italic; }
+
+  /* ---------- Step flow (설치신고 절차) ---------- */
+  .step-flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 4px; }
+  .step {
+    flex: 1 1 150px; min-width: 150px; background: var(--paper); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .step-n {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink);
+    font-family: var(--serif); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center;
+  }
+  .step-t { font-size: 13.5px; font-weight: 700; }
+  .step-d { font-size: 12px; color: var(--ink-dim); line-height: 1.55; }
+  .step-arrow { display: flex; align-items: center; justify-content: center; color: var(--ink-dim); font-size: 16px; flex: 0 0 auto; padding: 0 2px; }
+  @media (max-width: 780px) {
+    .step-flow { flex-direction: column; }
+    .step-arrow { transform: rotate(90deg); padding: 2px 0; }
+  }
+
+  /* ---------- Etc grid ---------- */
+  .etc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 720px) { .etc-grid { grid-template-columns: 1fr; } }
+</style>
+
+<div class="wrap">
+  <div class="brand-row">
+    <div class="brand-mark">EW</div>
+    <div class="brand-name">이웨이 주식회사 · 환경관리 지원</div>
+  </div>
+
+  <div class="hero">
+    <h1>우리 사업장, 지금 어떤 기준을 지켜야 할까요?</h1>
+    <p class="sub">배출량과 시설 조건 몇 가지만 입력하면 대기·폐수 각각의 허가·신고 구분부터 측정주기, 환경기술인 자격기준까지 한 번에 확인할 수 있습니다. 시설 변경 판정, 설치신고 절차, 폐기물·소음진동 등 기타 관리사항, 부지 규제 확인 요청까지 탭에서 바로 확인하세요.</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="diag" role="tab"><span class="n">1</span>대기 사업장 진단</button>
+    <button class="tab-btn" data-tab="water" role="tab"><span class="n">2</span>폐수 사업장 진단</button>
+    <button class="tab-btn" data-tab="change" role="tab"><span class="n">3</span>시설 변경 판정</button>
+    <button class="tab-btn" data-tab="procedure" role="tab"><span class="n">4</span>설치신고 절차</button>
+    <button class="tab-btn" data-tab="etc" role="tab"><span class="n">5</span>기타 인허가·관리</button>
+    <button class="tab-btn" data-tab="site" role="tab"><span class="n">6</span>부지 규제 확인</button>
+  </div>
+
+  <!-- =========================== TAB 1: 진단 =========================== -->
+  <div class="panel active" id="panel-diag">
+    <div class="grid2">
+      <div class="card">
+        <div class="field">
+          <label class="q" for="qty">연간 대기오염물질 발생량 합계</label>
+          <div class="num-input-row">
+            <input type="number" id="qty" value="6.5" min="0" step="0.1">
+            <span class="unit">톤 / 년</span>
+          </div>
+          <p class="hint">먼지·황산화물·질소산화물 등 모든 배출시설의 발생량 합계입니다. 정확한 수치를 모르시면 대략적인 값으로 먼저 확인해 보세요.</p>
+        </div>
+
+        <div class="field">
+          <label class="q">특정대기유해물질을 배출하나요?</label>
+          <div class="seg" data-name="hap">
+            <input type="radio" name="hap" id="hap-y" value="y"><label for="hap-y">예</label>
+            <input type="radio" name="hap" id="hap-n" value="n" checked><label for="hap-n" class="checked">아니오</label>
+            <input type="radio" name="hap" id="hap-u" value="u"><label for="hap-u">모름</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="q">대기특별대책지역(울산·여수 국가산단 등)에 있나요?</label>
+          <div class="seg" data-name="zone">
+            <input type="radio" name="zone" id="zone-y" value="y"><label for="zone-y">예</label>
+            <input type="radio" name="zone" id="zone-n" value="n" checked><label for="zone-n" class="checked">아니오</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="q">방지시설이 여과집진시설 하나뿐인가요? <span style="font-weight:400;color:var(--ink-dim);">(먼지만 배출)</span></label>
+          <div class="seg" data-name="bag">
+            <input type="radio" name="bag" id="bag-y" value="y"><label for="bag-y">예</label>
+            <input type="radio" name="bag" id="bag-n" value="n" checked><label for="bag-n" class="checked">아니오</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="q">굴뚝 자동측정기기(TMS)를 설치했나요?</label>
+          <div class="seg" data-name="tms">
+            <input type="radio" name="tms" id="tms-y" value="y"><label for="tms-y">예</label>
+            <input type="radio" name="tms" id="tms-n" value="n" checked><label for="tms-n" class="checked">아니오</label>
+          </div>
+          <p class="hint">설치했다면, 관제센터로 측정결과가 자동 전송되고 있나요?</p>
+          <div class="seg" data-name="tmsSend" id="tmsSendRow" style="margin-top:8px; opacity:.4; pointer-events:none;">
+            <input type="radio" name="tmsSend" id="send-y" value="y"><label for="send-y">예</label>
+            <input type="radio" name="tmsSend" id="send-n" value="n" checked><label for="send-n" class="checked">아니오</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <div class="result-head">
+          <h2>진단 결과</h2>
+          <span class="badge neutral" id="typeBadge">5종</span>
+        </div>
+        <div class="chips" id="chips"></div>
+
+        <div class="verdict-list" id="verdictList"></div>
+
+        <hr class="divider">
+        <div style="font-size:13px; font-weight:700; margin-bottom:8px;">자가측정 결과 보고기한</div>
+        <p style="font-size:12.5px; color:var(--ink-dim); line-height:1.6;">상반기(1~6월) 측정결과 → 당해년도 <b style="color:var(--ink)">7월까지</b> · 하반기(7~12월) 측정결과 → 다음연도 <b style="color:var(--ink)">1월까지</b> 관할 행정기관에 보고</p>
+
+        <div class="footnote">
+          <b>참고용 자가진단 결과입니다.</b> 개별 사업장 여건에 따라 적용 기준이 달라질 수 있으므로, 정확한 판단이 필요하시면 이웨이 주식회사(041-556-0724)로 문의해 주세요.
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 22px;">
+      <h3 style="font-size:15px; margin-bottom:12px;">판정 기준표</h3>
+      <div class="table-scroll">
+        <table class="wide-table">
+          <thead><tr><th>종별</th><th>연간 발생량</th><th>자가측정 주기</th><th>환경기술인</th></tr></thead>
+          <tbody>
+            <tr><td>1종</td><td>80톤 이상</td><td>매주 1회 이상</td><td>대기환경기사 이상 1명</td></tr>
+            <tr><td>2종</td><td>20톤 이상 80톤 미만</td><td>매월 2회 이상</td><td>대기환경산업기사 이상 1명</td></tr>
+            <tr><td>3종</td><td>10톤 이상 20톤 미만</td><td>2개월마다 1회 이상</td><td>대기환경산업기사 이상 또는 3년 이상 경력자</td></tr>
+            <tr><td>4종</td><td>2톤 이상 10톤 미만</td><td>반기마다 1회 이상</td><td>자격증 불필요(담당자 지정)</td></tr>
+            <tr><td>5종</td><td>2톤 미만</td><td>반기마다 1회 이상</td><td>자격증 불필요(담당자 지정)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="example-note">1~3종은 굴뚝 자동측정기기(TMS) 부착 대상입니다. 위 측정주기는 TMS 미부착·관제센터 미전송 사업장 기준입니다.</p>
+    </div>
+  </div>
+
+  <!-- =========================== TAB 2: 폐수 진단 =========================== -->
+  <div class="panel" id="panel-water">
+    <div class="grid2">
+      <div class="card">
+        <div class="field">
+          <label class="q" for="wqty">1일 폐수배출량</label>
+          <div class="num-input-row">
+            <input type="number" id="wqty" value="30" min="0" step="1">
+            <span class="unit">㎥ / 일</span>
+          </div>
+          <p class="hint">1년 중 가장 많이 배출한 날 기준입니다. 용수사용량에서 생활용수·간접냉각수 등을 뺀 값입니다.</p>
+        </div>
+
+        <div class="field">
+          <label class="q" for="wmethod">폐수를 주로 어떻게 처리하시나요?</label>
+          <select id="wmethod">
+            <option value="self">자체 방지시설로 처리 후 방류 (일반적인 경우)</option>
+            <option value="public">산업단지 등 공공폐수(하수)처리시설로 유입</option>
+            <option value="reuse">전량재이용 — 재이용 불가능한 일부만 부득이하게 위탁처리</option>
+            <option value="entrust">위탁처리 — 폐수를 외부 업체에 맡겨 처리</option>
+          </select>
+          <p class="hint">폐수무방류배출시설(분리·집수시설 등을 갖춘 정식 허가 유형) 허가를 받은 경우는 반도체 공장 등 극소수 대규모 사업장에 한정된 사례라 이 도구에서는 다루지 않습니다. 해당하신다면 이웨이로 직접 문의해 주세요.</p>
+        </div>
+
+        <div class="field">
+          <label class="q">특정수질유해물질을 기준 이상 배출하나요?</label>
+          <div class="seg" data-name="whap">
+            <input type="radio" name="whap" id="whap-y" value="y"><label for="whap-y">예</label>
+            <input type="radio" name="whap" id="whap-n" value="n" checked><label for="whap-n" class="checked">아니오</label>
+            <input type="radio" name="whap" id="whap-u" value="u"><label for="whap-u">모름</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="q">아래 지역 중 하나라도 해당하나요? <span style="font-weight:400;color:var(--ink-dim);">(특별대책지역 / 배출시설 설치제한지역(고시) / 상수원보호구역·상류 10km 이내 / 취수시설 상류 15km 이내)</span></label>
+          <div class="seg" data-name="wzone">
+            <input type="radio" name="wzone" id="wzone-y" value="y"><label for="wzone-y">예</label>
+            <input type="radio" name="wzone" id="wzone-n" value="n" checked><label for="wzone-n" class="checked">아니오</label>
+            <input type="radio" name="wzone" id="wzone-u" value="u"><label for="wzone-u">모름</label>
+          </div>
+        </div>
+
+        <div class="field" id="wentrustField" style="display:none;">
+          <label class="q" id="wentrustLabel">위탁받은 처리시설이 설치제한지역 등 <b>밖</b>에 있나요?</label>
+          <div class="seg" data-name="wentrust">
+            <input type="radio" name="wentrust" id="wentrust-y" value="y"><label for="wentrust-y">예</label>
+            <input type="radio" name="wentrust" id="wentrust-n" value="n" checked><label for="wentrust-n" class="checked">아니오</label>
+          </div>
+          <p class="hint" id="wentrustHint">전량을 위탁하고, 그 위탁처리시설이 특별대책지역 등 제한지역 밖에 있어야 신고로 완화됩니다 (근거: 시행령 제31조제2항제2호).</p>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <div class="result-head">
+          <h2>진단 결과</h2>
+          <span class="badge neutral" id="wTypeBadge">5종</span>
+        </div>
+        <div class="chips" id="wChips"></div>
+
+        <div class="verdict-list" id="wVerdictList"></div>
+
+        <hr class="divider">
+        <div style="font-size:13px; font-weight:700; margin-bottom:8px;">가동시작 신고</div>
+        <p style="font-size:12.5px; color:var(--ink-dim); line-height:1.6;">시설 설치(또는 변경)를 완료하면 가동 전에 미리 관할 행정기관에 가동시작 신고를 해야 합니다. 신고 후 일정 유예기간 동안 배출허용기준 준수 여부를 유예받고, 이후 오염도 검사를 받습니다. (근거: 물환경보전법 제37조)</p>
+
+        <div class="footnote">
+          <b>참고용 자가진단 결과입니다.</b> 개별 사업장 여건에 따라 적용 기준이 달라질 수 있으므로, 정확한 판단이 필요하시면 이웨이 주식회사(041-556-0724)로 문의해 주세요.
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 22px;">
+      <h3 style="font-size:15px; margin-bottom:12px;">판정 기준표</h3>
+      <div class="table-scroll">
+        <table class="wide-table">
+          <thead><tr><th>종별</th><th>1일 폐수배출량</th><th>환경기술인</th></tr></thead>
+          <tbody>
+            <tr><td>1종</td><td>2,000㎥ 이상</td><td>수질환경기사 1명 이상</td></tr>
+            <tr><td>2종</td><td>700㎥ 이상 2,000㎥ 미만</td><td>수질환경산업기사 1명 이상</td></tr>
+            <tr><td>3종</td><td>200㎥ 이상 700㎥ 미만</td><td>수질환경산업기사·환경기능사 또는 3년 이상 경력자</td></tr>
+            <tr><td>4종</td><td>50㎥ 이상 200㎥ 미만</td><td>자격증 불필요(담당자 지정)</td></tr>
+            <tr><td>5종</td><td>50㎥ 미만</td><td>자격증 불필요(담당자 지정)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="example-note">근거: 물환경보전법 시행령 별표13(사업장 규모별 구분), 별표17(환경기술인 자격기준). 특정수질유해물질이 포함된 폐수를 배출하는 4·5종은 1일 10㎥ 초과 시 3종 수준 환경기술인이 필요합니다.</p>
+      <div class="footnote" style="margin-top:14px;">
+        <b>물환경보전법에는 대기처럼 사업장 전체에 적용되는 법정 "자가측정 횟수표"가 없습니다.</b> 사업자가 스스로 측정하거나 측정대행업자에게 위탁할 수 있다는 재량 규정(제46조)이 기본이며, 법정 주기가 못박힌 것은 <b>특정수질유해물질 배출량조사</b>뿐입니다 — 1·2종 분기 1회, 3종 및 위탁처리·공동방지시설·공공처리시설 연계 사업장은 반기 1회 (근거: 시행규칙 제63조제4항·별표14의4). 그 외 일반 항목의 측정주기는 배출허용기준 준수 확인 목적으로 사업장이 자율적으로 정하는 것이 원칙입니다.
+      </div>
+      <div class="footnote" style="margin-top:10px;">
+        <b>변경허가 vs 변경신고</b> — 폐수배출량이 허가 당시보다 50%(특정수질유해물질 배출시설은 30%) 이상 <i>또는</i> 1일 700㎥ 이상 증가하면 변경허가 대상입니다. 공동방지시설 대표자·공공처리시설 운영자와 협의했거나 처리용량 이내 변경이면 변경신고로 갈음될 수 있습니다. (근거: 물환경보전법 시행령 제31조제3항·제4항)
+      </div>
+      <div class="footnote" style="margin-top:10px;">
+        <b>설치제한지역 + 특정수질유해물질은 "허가/신고" 이전에 입지 자체가 문제될 수 있습니다.</b> 원칙적으로 설치제한지역에서는 특정수질유해물질 배출시설의 입지가 제한되며, 인쇄출판·사진처리·X-Ray 등 환경부(지역) 고시로 정한 특정 업종이 전량 위탁처리하는 경우 등 좁은 예외에 해당해야만 입지할 수 있습니다(유역별 고시에 따라 예외 범위가 다름). "전량재이용이니까 괜찮다"거나 "위탁처리하니까 괜찮다"고 단정할 수 없으니, 두 조건이 겹치면 반드시 6번 탭 "부지 규제 확인"으로 문의해 주세요. (근거: 물환경보전법 제33조제7항~제9항, 시행규칙 제41조)
+      </div>
+      <div class="footnote" style="margin-top:10px;">
+        <b>위탁처리에는 물량 상한이 있습니다.</b> 전량재이용과 무관한 일반 위탁처리는 원칙적으로 1일 50㎥ 미만(설치제한지역은 20㎥ 미만)의 폐수에만 인정됩니다. 다만 전량재이용시설에서 재이용이 불가능해 부득이하게 공정 밖으로 배출되는 잔여폐수는 위탁 가능 물량 제한 없이 위탁처리할 수 있습니다 (근거: 시행규칙 제41조).
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================== TAB 3: 변경판정 =========================== -->
+  <div class="panel" id="panel-change">
+    <div class="subtabs" role="tablist" style="display:flex; gap:8px; margin-bottom:18px;">
+      <button class="subtab-btn active" data-subtab="air" role="tab">💨 대기시설 변경</button>
+      <button class="subtab-btn" data-subtab="water" role="tab">💧 폐수시설 변경</button>
+    </div>
+
+    <!-- ---- 3-1: 대기 변경판정 ---- -->
+    <div class="subpanel active" id="subchange-air">
+      <div class="grid2">
+        <div class="card">
+          <div class="field">
+            <label class="q" for="changeType">어떤 변경인가요?</label>
+            <select id="changeType">
+              <option value="same-facility">같은 배출구 안의 시설 증설·교체·폐쇄</option>
+              <option value="new-pollutant">기존에 허가·신고받은 물질 외 새 오염물질 배출</option>
+              <option value="prevention">방지시설 증설·교체·폐쇄</option>
+              <option value="fuel">원료·연료 변경</option>
+              <option value="name">사업장 명칭·대표자 변경</option>
+              <option value="lease">배출시설·방지시설 임대</option>
+              <option value="doc">신고증명서(허가증) 기재사항·조업시간 변경</option>
+            </select>
+          </div>
+
+          <div class="field" id="rateField">
+            <label class="q" for="rate">기존 대비 증설 비율은 얼마인가요?</label>
+            <div class="num-input-row">
+              <input type="number" id="rate" value="15" min="0" step="1">
+              <span class="unit">%</span>
+            </div>
+            <p class="hint">같은 배출구의 같은 종류 시설을 몇 % 늘리시는지 입력해 주세요.</p>
+          </div>
+
+          <div class="field" id="hapField">
+            <label class="q">해당 시설이 특정대기유해물질을 배출하나요?</label>
+            <div class="seg" data-name="chHap">
+              <input type="radio" name="chHap" id="chHap-y" value="y"><label for="chHap-y">예</label>
+              <input type="radio" name="chHap" id="chHap-n" value="n" checked><label for="chHap-n" class="checked">아니오</label>
+            </div>
+          </div>
+
+          <div class="field" id="capField">
+            <label class="q">늘어나는 오염물질량이 방지시설 처리용량 이내이고, 다른 법령상 설치제한에 저촉되지 않나요?</label>
+            <div class="seg" data-name="cap">
+              <input type="radio" name="cap" id="cap-y" value="y" checked><label for="cap-y" class="checked">예</label>
+              <input type="radio" name="cap" id="cap-n" value="n"><label for="cap-n">아니오 / 모름</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-head"><h2>변경 판정 결과</h2></div>
+          <div class="verdict-list" id="changeVerdict"></div>
+          <div class="footnote" id="changeNote"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- 3-2: 폐수 변경판정 ---- -->
+    <div class="subpanel" id="subchange-water">
+      <div class="grid2">
+        <div class="card">
+          <div class="field">
+            <label class="q" for="changeTypeW">어떤 변경인가요?</label>
+            <select id="changeTypeW">
+              <option value="same-facility-w">같은 배출구 안의 시설 증설·교체</option>
+              <option value="new-pollutant-w">배출허용기준을 초과하는 새 오염물질이 발생해 시설 개선이 필요</option>
+              <option value="zerodischarge-w">폐수무방류배출시설의 고체폐기물 처리방법 변경</option>
+              <option value="minor-w">사업장 명칭·대표자 변경 등 그 밖의 경미한 사항</option>
+            </select>
+          </div>
+
+          <div class="field" id="rateFieldW">
+            <label class="q" for="rateW">기존 허가 당시 대비 폐수배출량 증가 비율은 얼마인가요?</label>
+            <div class="num-input-row">
+              <input type="number" id="rateW" value="15" min="0" step="1">
+              <span class="unit">%</span>
+            </div>
+          </div>
+
+          <div class="field" id="incFieldW">
+            <label class="q" for="incW">증가하는 폐수배출량은 1일 몇 ㎥인가요?</label>
+            <div class="num-input-row">
+              <input type="number" id="incW" value="50" min="0" step="10">
+              <span class="unit">㎥/일</span>
+            </div>
+            <p class="hint">비율 기준과 별개로, 1일 700㎥ 이상 증가하면 그 자체로 변경허가 대상입니다.</p>
+          </div>
+
+          <div class="field" id="hapFieldW">
+            <label class="q">해당 시설이 특정수질유해물질을 기준 이상 배출하나요?</label>
+            <div class="seg" data-name="chHapW">
+              <input type="radio" name="chHapW" id="chHapW-y" value="y"><label for="chHapW-y">예</label>
+              <input type="radio" name="chHapW" id="chHapW-n" value="n" checked><label for="chHapW-n" class="checked">아니오</label>
+            </div>
+          </div>
+
+          <div class="field" id="capFieldW">
+            <label class="q">공동방지시설 대표자·공공처리시설 운영자와 협의했고, 폐수처리능력·처리용량 이내의 변경인가요?</label>
+            <div class="seg" data-name="capW">
+              <input type="radio" name="capW" id="capW-y" value="y"><label for="capW-y">예</label>
+              <input type="radio" name="capW" id="capW-n" value="n" checked><label for="capW-n" class="checked">아니오 / 모름</label>
+            </div>
+            <p class="hint">두 조건을 모두 충족하면 변경허가 대상이라도 변경신고로 갈음될 수 있습니다.</p>
+          </div>
+
+          <div class="footnote" style="margin-top:14px;">
+            아래 판정은 이미 <b>설치허가</b>를 받은 폐수배출시설의 변경 기준입니다(물환경보전법 시행령 제31조제3항·제4항). 신고 대상 시설의 변경신고 세부 요건은 시행규칙에 위임되어 있어 이웨이 확인을 권장합니다.
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-head"><h2>변경 판정 결과</h2></div>
+          <div class="verdict-list" id="changeVerdictW"></div>
+          <div class="footnote" id="changeNoteW"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================== TAB 4: 설치신고 절차 =========================== -->
+  <div class="panel" id="panel-procedure">
+    <div class="card">
+      <h3 style="font-size:16px; margin-bottom:6px;">설치신고(허가) → 가동까지 6단계</h3>
+      <p style="font-size:13px; color:var(--ink-dim); line-height:1.6; margin-bottom:18px;">대기·폐수 배출시설 모두 아래와 같은 흐름으로 진행됩니다. "허가" 대상이면 ①·③단계가 "허가신청서 제출"·"허가증 발급"으로 바뀔 뿐 전체 흐름은 같습니다.</p>
+
+      <div class="step-flow">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div class="step-body">
+            <div class="step-t">신청서 접수</div>
+            <div class="step-d">설치신고서(또는 허가신청서), 배출량 예측 명세서, 방지시설 설치명세서·도면 등 서류를 관할 행정기관에 제출</div>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div class="step-body">
+            <div class="step-t">서류 검토</div>
+            <div class="step-d">배출가능 오염물질, 방지시설 적정성, 입지 제한(설치제한지역 등) 여부를 관할 행정기관이 검토</div>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div class="step-body">
+            <div class="step-t">신고수리 / 허가</div>
+            <div class="step-d">신고증명서(또는 허가증) 교부</div>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-n">4</div>
+          <div class="step-body">
+            <div class="step-t">시설 설치</div>
+            <div class="step-d">신고(허가) 받은 내용대로 배출시설·방지시설 설치</div>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-n">5</div>
+          <div class="step-body">
+            <div class="step-t">가동개시(가동시작) 신고</div>
+            <div class="step-d">가동 전 미리 신고. 사전에 <b>측정기기 부착</b>과 <b>환경기술인 임명</b>을 완료해야 함</div>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-n">6</div>
+          <div class="step-body">
+            <div class="step-t">가동</div>
+            <div class="step-d">배출허용기준 준수 및 자가측정(대기) 실시 · 유예기간 후 오염도검사(폐수)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footnote" style="margin-top:18px;">
+        <b>대기</b> 근거: 대기환경보전법 제23조제1항·제4항, 제30조제1항, 시행령 제11조제3항·제15조, 시행규칙 제25조 · <b>폐수</b> 근거: 물환경보전법 제33조, 제37조, 시행령 제31조
+      </div>
+      <div class="footnote" style="margin-top:10px;">
+        국가산업단지에 입주하는 경우 입주계약·공장등록 절차가 함께 얽혀 단계 수가 더 늘어날 수 있습니다. 산업단지 입주 예정이시면 미리 이웨이로 문의해 주세요.
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================== TAB 5: 기타 인허가·관리 =========================== -->
+  <div class="panel" id="panel-etc">
+    <div class="etc-grid">
+      <div class="card">
+        <h3 style="font-size:15px; margin-bottom:10px;">🗑️ 폐기물관리</h3>
+        <p style="font-size:13px; line-height:1.7;">사업장에서 발생하는 폐기물은 <b>사업장일반폐기물</b>과 유해성 기준에 해당하는 <b>지정폐기물</b>로 구분해 관리해야 합니다. 지정폐기물은 별도 보관기준(용기·표지판)을 지켜야 하고, 위탁 처리 시 <b>올바로시스템(폐기물 인계·인수 관리시스템)</b>에 인계·인수 내용을 등록해야 합니다.</p>
+        <p style="font-size:12px; color:var(--ink-dim); margin-top:10px;">근거: 폐기물관리법 제2조·제17조·제18조, 올바로시스템(한국환경공단)</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:15px; margin-bottom:10px;">🔊 소음·진동 관리</h3>
+        <p style="font-size:13px; line-height:1.7;">공장에 소음·진동배출시설을 설치하려면 대기·폐수와 마찬가지로 <b>설치신고</b>를 해야 합니다. 생활소음·진동 규제기준(주간/야간, 용도지역별)을 넘지 않도록 방음·방진시설을 갖추어야 합니다.</p>
+        <p style="font-size:12px; color:var(--ink-dim); margin-top:10px;">근거: 소음·진동관리법 제8조(배출시설의 설치 신고)</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:15px; margin-bottom:10px;">🎓 환경기술인 교육주기</h3>
+        <p style="font-size:13px; line-height:1.7;">대기·수질 환경기술인 모두 동일한 주기로 법정교육을 받아야 합니다.</p>
+        <ul style="font-size:13px; line-height:1.8; padding-left:18px; margin-top:8px;">
+          <li><b>신규교육</b> — 환경기술인으로 임명된 날부터 <b>1년 이내</b> 1회</li>
+          <li><b>보수교육</b> — 신규교육을 받은 날 기준 <b>3년마다</b> 1회</li>
+        </ul>
+        <p style="font-size:12px; color:var(--ink-dim); margin-top:10px;">근거: 대기환경보전법 제77조·시행규칙 제125조(수질은 물환경보전법 제67조에 동일 취지로 규정). 미이수 시 과태료(대기환경보전법 제94조제4항) 부과 대상. 교육기관: 한국환경보전원(kepaedu.or.kr)</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:15px; margin-bottom:10px;">💨 기타 대기 인허가 유형</h3>
+        <p style="font-size:13px; line-height:1.7; margin-bottom:8px;">아래 유형에 해당하면 이 도구의 "대기 사업장 진단"과 별개로 추가 신고·허가가 필요할 수 있습니다. 해당 여부가 궁금하시면 이웨이로 문의해 주세요.</p>
+        <ul style="font-size:13px; line-height:1.9; padding-left:18px;">
+          <li><b>비산배출시설</b> — 저장·이송·야적 등 밀폐되지 않은 공정에서 대기오염물질이 흩날려 배출되는 시설. 별도 신고 대상</li>
+          <li><b>휘발성유기화합물(VOCs) 배출시설</b> — 특별대책지역·대기관리권역 등에서 도장·세척·저장 시설 운영 시 신고 대상</li>
+          <li><b>총량관리사업장</b> — 대기관리권역 내 총량관리 대상 오염물질을 배출하는 사업장은 별도 허가(총량초과부과금 대상)</li>
+        </ul>
+        <p style="font-size:12px; color:var(--ink-dim); margin-top:10px;">근거: 대기환경보전법 제38조의2(비산배출), 제44조(VOCs), 대기관리권역법 제12조 등(총량관리)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================== TAB 6: 부지 규제 확인 =========================== -->
+  <div class="panel" id="panel-site">
+    <div class="grid2">
+      <div class="card">
+        <div class="field">
+          <label class="q" for="addrInput">확인하고 싶은 부지 주소</label>
+          <input type="text" id="addrInput" placeholder="예: 충청남도 천안시 서북구 두정상가 7길 56" style="font: inherit; font-family: var(--sans); font-size: 15px; width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 9px; background: var(--paper); color: var(--ink);">
+          <p class="hint">이 도구는 아직 주소를 실시간으로 자동 조회하지 못합니다. 아래 버튼을 누르면 문의 내용이 만들어지고, 복사해서 이웨이로 보내주시면 담당자가 직접 확인해 드립니다.</p>
+        </div>
+        <button type="button" id="addrReqBtn" style="font: inherit; font-family: var(--sans); font-size: 14.5px; font-weight: 700; padding: 11px 18px; border-radius: 9px; border: none; background: var(--accent); color: var(--accent-ink); cursor: pointer;">확인 요청 문구 만들기</button>
+
+        <div id="addrResultWrap" style="display:none; margin-top:18px;">
+          <div class="field" style="margin-bottom:10px;">
+            <label class="q" style="margin-bottom:6px;">아래 문구를 복사해서 문자·카카오톡으로 보내주세요</label>
+            <textarea id="addrResultText" readonly rows="3" style="font: inherit; font-family: var(--sans); font-size: 13.5px; width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 9px; background: var(--surface-2); color: var(--ink); resize: vertical;"></textarea>
+          </div>
+          <button type="button" id="addrCopyBtn" style="font: inherit; font-family: var(--sans); font-size: 13.5px; font-weight: 700; padding: 9px 16px; border-radius: 9px; border: 1.5px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer;">문구 복사하기</button>
+          <span id="addrCopyStatus" style="font-size: 12.5px; color: var(--ink-dim); margin-left: 10px;"></span>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <div class="result-head"><h2>확인 가능한 항목</h2></div>
+        <ul style="font-size:13px; line-height:1.9; padding-left:18px; margin:0;">
+          <li>용도지역·용도지구·용도구역 (일반상업지역, 계획관리지역 등)</li>
+          <li>지구단위계획구역 해당 여부</li>
+          <li>도시계획시설(도로·공원 등) 저촉 여부</li>
+          <li>농지·산림·산업단지 관련 지정사항</li>
+          <li>가축사육제한구역, 수질보전 관련 지정사항</li>
+          <li>문화재보호구역·자연공원 등 그 밖의 법령상 지정사항</li>
+        </ul>
+        <hr class="divider">
+        <div class="footnote">
+          <b>국토교통부 공간정보(V-World) 기반 참고자료이며 법적 효력이 없습니다.</b> 대기특별대책지역·폐수 배출시설 설치제한지역처럼 이 도구의 진단 결과에 직접 영향을 주는 항목은 관할 행정기관 확인이 원칙적으로 필요합니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-bar">
+    <div>
+      <div class="t">정확한 적용 여부가 궁금하신가요?</div>
+      <div class="d">이웨이 주식회사 · 충청남도 천안시 서북구 두정상가 7길 56, 403호</div>
+    </div>
+    <div class="phone num">041-556-0724</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ---- tab switching ----
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var panels = {
+    diag: document.getElementById('panel-diag'),
+    water: document.getElementById('panel-water'),
+    change: document.getElementById('panel-change'),
+    procedure: document.getElementById('panel-procedure'),
+    etc: document.getElementById('panel-etc'),
+    site: document.getElementById('panel-site'),
+  };
+  tabBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      tabBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      Object.keys(panels).forEach(function (k) { panels[k].classList.remove('active'); });
+      panels[btn.dataset.tab].classList.add('active');
+    });
+  });
+
+  // ---- sub-tab switching (시설 변경 판정: 대기 / 폐수) ----
+  var subtabBtns = document.querySelectorAll('.subtab-btn');
+  var subpanels = {
+    air: document.getElementById('subchange-air'),
+    water: document.getElementById('subchange-water'),
+  };
+  subtabBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      subtabBtns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      Object.keys(subpanels).forEach(function (k) { subpanels[k].classList.remove('active'); });
+      subpanels[btn.dataset.subtab].classList.add('active');
+    });
+  });
+
+  // ---- segmented control visual state + change wiring ----
+  function wireSeg(name, onChange) {
+    var inputs = document.querySelectorAll('input[name="' + name + '"]');
+    inputs.forEach(function (inp) {
+      inp.addEventListener('change', function () {
+        inputs.forEach(function (i) {
+          var lbl = document.querySelector('label[for="' + i.id + '"]');
+          if (lbl) lbl.classList.toggle('checked', i.checked);
+        });
+        onChange();
+      });
+    });
+  }
+
+  function segVal(name) {
+    var el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  // ==================== TAB 1 LOGIC ====================
+  function classify(qty) {
+    if (qty >= 80) return 1;
+    if (qty >= 20) return 2;
+    if (qty >= 10) return 3;
+    if (qty >= 2) return 4;
+    return 5;
+  }
+
+  var TECH_BY_TYPE = {
+    1: '대기환경기사 이상 1명 이상',
+    2: '대기환경산업기사 이상 1명 이상',
+    3: '대기환경산업기사 이상, 또는 3년 이상 관련 경력자 1명',
+    4: '자격증 불필요 — 배출시설 담당 직원 중 1명 지정 가능',
+    5: '자격증 불필요 — 배출시설 담당 직원 중 1명 지정 가능',
+  };
+  var BASE_CYCLE_BY_TYPE = {
+    1: '매주 1회 이상',
+    2: '매월 2회 이상',
+    3: '2개월마다 1회 이상',
+    4: '반기마다 1회 이상',
+    5: '반기마다 1회 이상',
+  };
+
+  function renderDiag() {
+    var qty = parseFloat(document.getElementById('qty').value) || 0;
+    var type = classify(qty);
+    var hap = segVal('hap');
+    var zone = segVal('zone');
+    var bag = segVal('bag');
+    var tms = segVal('tms');
+    var tmsSend = segVal('tmsSend');
+
+    document.getElementById('tmsSendRow').style.opacity = tms === 'y' ? '1' : '.4';
+    document.getElementById('tmsSendRow').style.pointerEvents = tms === 'y' ? 'auto' : 'none';
+
+    document.getElementById('typeBadge').textContent = type + '종';
+
+    // chips
+    var chips = [];
+    chips.push(qty.toLocaleString() + '톤/년');
+    if (hap === 'y') chips.push('특정유해물질 배출');
+    if (zone === 'y') chips.push('대기특별대책지역');
+    if (bag === 'y') chips.push('여과집진시설만 설치');
+    if (tms === 'y') chips.push('TMS 설치');
+    document.getElementById('chips').innerHTML = chips.map(function (c) { return '<span class="chip">' + c + '</span>'; }).join('');
+
+    // 1) 허가/신고
+    var permitBadge, permitText, permitBasis;
+    if (hap === 'u') {
+      permitBadge = 'warn'; permitText = '확인 필요';
+      permitBasis = '특정대기유해물질 배출 여부를 확인해야 정확히 판정할 수 있습니다.';
+    } else if (hap === 'y' || zone === 'y') {
+      permitBadge = 'critical'; permitText = '설치허가 대상';
+      permitBasis = (hap === 'y' ? '특정대기유해물질 배출' : '') + (hap === 'y' && zone === 'y' ? ' · ' : '') + (zone === 'y' ? '대기특별대책지역 소재' : '') + ' (근거: 대기환경보전법 제23조, 시행령 제11조)';
+    } else {
+      permitBadge = 'good'; permitText = '설치신고 대상';
+      permitBasis = '특정대기유해물질 배출·대기특별대책지역 모두 해당 없음 (근거: 대기환경보전법 제23조제1항·제4항, 시행령 제11조제3항)';
+    }
+
+    // 2) 자가측정 주기
+    var cycle = BASE_CYCLE_BY_TYPE[type];
+    var cycleBasis = '근거: 대기환경보전법 시행규칙 별표 11';
+    if (hap === 'y') {
+      cycle = '매월 2회 이상 (상향 적용)';
+      cycleBasis = '특정대기유해물질 배출 시설은 종별과 무관하게 매월 2회 이상 (근거: 별표 11 상향 예외)';
+    } else if (bag === 'y' && (type === 4 || type === 5)) {
+      cycle = '반기마다 1회 이상';
+      cycleBasis = '먼지만 배출·여과집진시설만 설치한 경우 규모와 무관하게 반기 1회 (근거: 별표 11 완화 예외)';
+    }
+    if (tms === 'y' && tmsSend === 'y') {
+      cycle += ' → TMS 별도기준 적용';
+      cycleBasis = '관제센터 자동전송 사업장은 방지시설 전·후단 측정 여부에 따른 별도 표가 적용됩니다.';
+    }
+
+    // 3) 환경기술인
+    var tech = TECH_BY_TYPE[type];
+
+    // 4) IoT 대상
+    var iotBadge, iotText, iotBasis;
+    if ((type === 4 || type === 5) && tms !== 'y') {
+      iotBadge = 'good'; iotText = '지원 대상 (국비 60%)';
+      iotBasis = 'TMS 관리 대상에서 제외된 4·5종 소규모 사업장 (근거: 대기환경보전법, 2022.5 개정)';
+    } else if (tms === 'y') {
+      iotBadge = 'neutral'; iotText = '해당 없음 (이미 TMS 설치)';
+      iotBasis = 'TMS를 이미 설치한 사업장은 IoT 부착지원사업 대상이 아닙니다.';
+    } else {
+      iotBadge = 'neutral'; iotText = '지원 대상 아님';
+      iotBasis = '1~3종은 TMS 부착 대상으로 IoT 지원사업과는 별도입니다.';
+    }
+
+    // 5) TMS 의무
+    var tmsBadge, tmsText;
+    if (type <= 3) { tmsBadge = 'critical'; tmsText = '부착 대상 (1~3종)'; }
+    else { tmsBadge = 'good'; tmsText = '의무 대상 아님'; }
+
+    var items = [
+      { icon: '📋', label: '설치 허가·신고', value: permitText, badge: permitBadge, basis: permitBasis },
+      { icon: '🗓️', label: '자가측정 주기', value: cycle, badge: 'neutral', basis: cycleBasis },
+      { icon: '🎓', label: '환경기술인 자격기준', value: tech, badge: 'neutral', basis: '근거: 대기환경보전법 시행령 별표 10' },
+      { icon: '📡', label: '사물인터넷(IoT) 부착지원', value: iotText, badge: iotBadge, basis: iotBasis },
+      { icon: '🏭', label: '굴뚝자동측정기기(TMS)', value: tmsText, badge: tmsBadge, basis: '1~3종은 TMS 부착 대상 (근거: 대기환경보전법 시행령 별표 3)' },
+    ];
+
+    document.getElementById('verdictList').innerHTML = items.map(function (it) {
+      return '<div class="verdict ' + it.badge + '">' +
+        '<span class="icon">' + it.icon + '</span>' +
+        '<span class="label">' + it.label + '</span>' +
+        '<span class="value">' + it.value + '</span>' +
+        '<span class="basis">' + it.basis + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  ['hap', 'zone', 'bag', 'tms', 'tmsSend'].forEach(function (n) { wireSeg(n, renderDiag); });
+  document.getElementById('qty').addEventListener('input', renderDiag);
+
+  // ==================== TAB 2 (폐수) LOGIC ====================
+  function classifyWater(qty) {
+    if (qty >= 2000) return 1;
+    if (qty >= 700) return 2;
+    if (qty >= 200) return 3;
+    if (qty >= 50) return 4;
+    return 5;
+  }
+
+  var WTECH_BY_TYPE = {
+    1: '수질환경기사 1명 이상',
+    2: '수질환경산업기사 1명 이상',
+    3: '수질환경산업기사·환경기능사 또는 3년 이상 경력자 1명',
+    4: '자격증 불필요 — 배출시설 담당 직원 중 1명 지정 가능',
+    5: '자격증 불필요 — 배출시설 담당 직원 중 1명 지정 가능',
+  };
+
+  function renderWater() {
+    var qty = parseFloat(document.getElementById('wqty').value) || 0;
+    var type = classifyWater(qty);
+    var method = document.getElementById('wmethod').value; // self / public / reuse / entrust
+    var hap = segVal('whap');
+    var zone = segVal('wzone');
+    var entrust = segVal('wentrust');
+
+    var hasTrigger = hap === 'y' || zone === 'y';
+    var showEntrustField = hasTrigger && (method === 'reuse' || method === 'entrust');
+    document.getElementById('wentrustField').style.display = showEntrustField ? '' : 'none';
+    if (method === 'reuse') {
+      document.getElementById('wentrustLabel').innerHTML = '재이용이 불가능해 부득이하게 위탁하는 잔여폐수의 처리시설이 설치제한지역 등 <b>밖</b>에 있나요?';
+      document.getElementById('wentrustHint').textContent = '전량재이용시설의 잔여배출분은 위탁 가능 물량 제한이 없지만, 신고 완화를 받으려면 위탁받은 처리시설이 제한지역 밖에 있어야 합니다 (근거: 시행규칙 제41조 단서, 시행령 제31조제2항제2호).';
+    } else {
+      document.getElementById('wentrustLabel').innerHTML = '위탁받은 처리시설이 설치제한지역 등 <b>밖</b>에 있나요?';
+      document.getElementById('wentrustHint').textContent = '전량을 위탁하고, 그 위탁처리시설이 특별대책지역 등 제한지역 밖에 있어야 신고로 완화됩니다 (근거: 시행령 제31조제2항제2호).';
+    }
+
+    document.getElementById('wTypeBadge').textContent = type + '종';
+
+    var METHOD_LABEL = { self: '자체처리 후 방류', public: '공공처리시설 유입', reuse: '전량재이용', entrust: '위탁처리' };
+    var chips = [];
+    chips.push(qty.toLocaleString() + '㎥/일');
+    chips.push(METHOD_LABEL[method]);
+    if (hap === 'y') chips.push('특정수질유해물질 배출');
+    if (zone === 'y') chips.push('설치제한지역 등 해당');
+    document.getElementById('wChips').innerHTML = chips.map(function (c) { return '<span class="chip">' + c + '</span>'; }).join('');
+
+    // 0) 위탁처리 물량 적격 여부 — 재이용과 무관한 순수 위탁처리는 물량 상한이 있습니다.
+    var entrustCapBadge = null, entrustCapText = null, entrustCapBasis = null;
+    if (method === 'entrust') {
+      var cap = zone === 'y' ? 20 : 50;
+      if (qty >= cap) {
+        entrustCapBadge = 'critical'; entrustCapText = '위탁처리 물량 기준 초과 가능성';
+        entrustCapBasis = '재이용과 무관한 일반 위탁처리는 원칙적으로 1일 ' + cap + '㎥ 미만 폐수에만 허용됩니다(설치제한지역은 20㎥ 미만). 현재 입력하신 배출량(' + qty.toLocaleString() + '㎥/일)은 이 기준을 넘어, 위탁처리만으로는 적법한 처리방법으로 인정되지 않을 수 있습니다. 자체 방지시설 설치나 전량재이용 방식을 함께 검토하세요 (근거: 시행규칙 제41조).';
+      } else {
+        entrustCapBadge = 'good'; entrustCapText = '위탁처리 물량 기준 이내';
+        entrustCapBasis = '1일 ' + cap + '㎥ 미만 기준을 충족합니다 (근거: 시행규칙 제41조제1호).';
+      }
+    }
+
+    // 1) 설치 허가·신고
+    var permitBadge, permitText, permitBasis;
+    if (hap === 'u' || zone === 'u') {
+      permitBadge = 'warn'; permitText = '확인 필요';
+      permitBasis = '특정수질유해물질 배출 여부·설치제한지역 해당 여부를 확인해야 정확히 판정할 수 있습니다.';
+    } else if (hap === 'y' || zone === 'y') {
+      var entrustOK = (method === 'reuse' || method === 'entrust') && entrust === 'y';
+      var publicOK = hap !== 'y' && method === 'public';
+      if (entrustOK || publicOK) {
+        permitBadge = 'warn'; permitText = '신고로 완화 가능';
+        if (entrustOK) {
+          permitBasis = (method === 'reuse'
+            ? '전량재이용시설의 잔여배출분을 위탁처리하며 위탁받은 처리시설이 설치제한지역 등 밖에 있어 신고로 완화됩니다 (근거: 시행규칙 제41조 단서, 시행령 제31조제2항제2호).'
+            : '전량 위탁처리하며 위탁받은 처리시설이 설치제한지역 등 밖에 있어 신고로 완화됩니다 (근거: 시행령 제31조제2항제2호).') + ' 위탁 여부·위탁시설 소재지는 위탁계약서로 확인이 필요합니다.';
+        } else {
+          permitBasis = '특정수질유해물질 기준 미만이면서 전량 공공폐수(하수)처리시설로 유입해 신고로 완화됩니다 (근거: 시행령 제31조제2항제3호).';
+        }
+      } else {
+        permitBadge = 'critical'; permitText = '설치허가 대상';
+        permitBasis = (hap === 'y' ? '특정수질유해물질 기준 이상 배출' : '') + (hap === 'y' && zone === 'y' ? ' · ' : '') + (zone === 'y' ? '특별대책지역·설치제한지역·상수원 상류 등 해당' : '') + ' (근거: 물환경보전법 제33조, 시행령 제31조제1항)';
+      }
+    } else {
+      permitBadge = 'good'; permitText = '설치신고 대상';
+      permitBasis = '특정수질유해물질·설치제한지역 모두 해당 없음 (근거: 물환경보전법 제33조제1항, 시행령 제31조제2항제1호)';
+    }
+
+    // 1.5) 설치제한지역 내 입지 가능 여부 — 특정수질유해물질 + 설치제한지역이 겹칠 때는
+    // 허가/신고 구분 이전에 "애초에 입지가 가능한지" 자체가 별도 쟁점이 됩니다.
+    var siteBadge = null, siteText = null, siteBasis = null;
+    if (hap === 'y' && zone === 'y') {
+      siteBadge = 'critical'; siteText = '입지 제한 가능성 — 사전 확인 필수';
+      siteBasis = '설치제한지역에서는 특정수질유해물질 배출시설의 입지가 원칙적으로 제한됩니다. 일반적으로는 인쇄출판·사진처리·X-Ray 등 <b>환경부(지역) 고시로 정한 특정 업종이 전량 위탁처리</b>하는 경우에 한해 예외가 인정되고, 유역에 따라 특정 물질을 무방류 방식으로 처리하는 경우도 예외가 될 수 있습니다. 위탁처리·재이용 여부와 무관하게 예외 업종·조건에 해당하지 않으면 <b>허가·신고 이전에 설치 자체가 불가능</b>할 수 있으니, 6번 탭 "부지 규제 확인"에서 확인을 요청해 주세요.';
+    }
+
+    // 2) 환경기술인
+    var tech = WTECH_BY_TYPE[type];
+    var techBasis = '근거: 물환경보전법 시행령 별표17';
+    if (hap === 'y' && (type === 4 || type === 5)) {
+      tech = '수질환경산업기사·환경기능사 또는 3년 이상 경력자 1명 (3종 수준 상향)';
+      techBasis = '특정수질유해물질이 포함된 폐수를 배출하는 4·5종은 1일 10㎥ 초과 시 3종 수준 환경기술인 필요 (근거: 시행령 별표17 비고2)';
+    }
+
+    // 3) 정기 배출량조사(특정수질유해물질)
+    var surveyBadge, surveyText, surveyBasis;
+    if (hap === 'y') {
+      var isPooled = method === 'entrust' || method === 'reuse' || method === 'public';
+      if (!isPooled && (type === 1 || type === 2)) {
+        surveyBadge = 'neutral'; surveyText = '분기 1회 이상';
+        surveyBasis = '위탁처리·공동방지시설·공공처리시설 연계 시에는 종별과 무관하게 반기 1회로 바뀝니다 (근거: 시행규칙 제63조제4항·별표14의4)';
+      } else {
+        surveyBadge = 'neutral'; surveyText = '반기 1회 이상';
+        surveyBasis = isPooled
+          ? '위탁처리·전량재이용(잔여분 위탁)·공공처리시설 연계 사업장은 종별과 무관하게 반기 1회 (근거: 시행규칙 제63조제4항·별표14의4)'
+          : '3종 이하 사업장은 반기 1회 (근거: 시행규칙 제63조제4항·별표14의4)';
+      }
+    } else {
+      surveyBadge = 'neutral'; surveyText = '법정 주기 없음 (자율 관리)';
+      surveyBasis = '특정수질유해물질을 배출하지 않으면 법정 조사주기 대상이 아닙니다. 배출허용기준 준수 확인은 사업장이 자율적으로 측정 계획을 정합니다 (근거: 제46조).';
+    }
+
+    var items = [
+      { icon: '📋', label: '설치 허가·신고', value: permitText, badge: permitBadge, basis: permitBasis },
+    ];
+    if (siteText) {
+      items.push({ icon: '🚧', label: '설치제한지역 내 입지 가능 여부', value: siteText, badge: siteBadge, basis: siteBasis });
+    }
+    if (entrustCapText) {
+      items.push({ icon: '⚖️', label: '위탁처리 가능 물량 기준', value: entrustCapText, badge: entrustCapBadge, basis: entrustCapBasis });
+    }
+    items.push(
+      { icon: '🎓', label: '환경기술인 자격기준', value: tech, badge: 'neutral', basis: techBasis },
+      { icon: '🧪', label: '정기 배출량조사 주기(특정수질유해물질)', value: surveyText, badge: surveyBadge, basis: surveyBasis }
+    );
+
+    document.getElementById('wVerdictList').innerHTML = items.map(function (it) {
+      return '<div class="verdict ' + it.badge + '">' +
+        '<span class="icon">' + it.icon + '</span>' +
+        '<span class="label">' + it.label + '</span>' +
+        '<span class="value">' + it.value + '</span>' +
+        '<span class="basis">' + it.basis + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  ['whap', 'wzone', 'wentrust'].forEach(function (n) { wireSeg(n, renderWater); });
+  document.getElementById('wqty').addEventListener('input', renderWater);
+  document.getElementById('wmethod').addEventListener('change', renderWater);
+
+  // ==================== TAB 3 (변경판정) LOGIC ====================
+  var CHANGE_INFO = {
+    'same-facility': { label: '같은 배출구 시설 증설·교체·폐쇄', timing: '변경 전', usesRate: true },
+    'new-pollutant': { label: '새 오염물질 배출', timing: '사유 발생 후 30일 이내', usesRate: false },
+    'prevention': { label: '방지시설 증설·교체·폐쇄', timing: '변경 전', usesRate: false },
+    'fuel': { label: '원료·연료 변경', timing: '변경 전', usesRate: false },
+    'name': { label: '사업장 명칭·대표자 변경', timing: '사유 발생 후 2개월 이내', usesRate: false },
+    'lease': { label: '배출시설·방지시설 임대', timing: '사유 발생 후 30일 이내', usesRate: false },
+    'doc': { label: '기재사항·조업시간 변경', timing: '변경 전', usesRate: false },
+  };
+
+  function renderChange() {
+    var type = document.getElementById('changeType').value;
+    var info = CHANGE_INFO[type];
+    var rate = parseFloat(document.getElementById('rate').value) || 0;
+    var hap = segVal('chHap');
+    var cap = segVal('cap');
+
+    document.getElementById('rateField').style.display = info.usesRate ? '' : 'none';
+    document.getElementById('hapField').style.display = info.usesRate ? '' : 'none';
+    document.getElementById('capField').style.display = info.usesRate ? '' : 'none';
+
+    var items = [];
+    var note = '';
+
+    if (info.usesRate) {
+      var threshold = hap === 'y' ? 30 : 50;
+      if (rate >= threshold) {
+        items.push({ icon: '🔺', label: '판정', value: '변경허가 대상', badge: 'critical',
+          basis: '배출시설 규모를 ' + threshold + '% 이상 증설 (근거: 대기환경보전법 시행령 제12조)' });
+      } else if (rate < 10 && cap === 'y') {
+        items.push({ icon: '✅', label: '판정', value: '변경신고 불필요 가능성', badge: 'good',
+          basis: '같은 배출구·같은 종류 시설을 10% 미만 증설하면서 처리용량 이내·타법 저촉 없음 (근거: 시행령 제13조)' });
+        note = '다만 실제로 신고가 필요 없는지는 시설 세부조건에 따라 달라질 수 있으니 확인을 권장합니다.';
+      } else {
+        items.push({ icon: '📝', label: '판정', value: '변경신고 대상', badge: 'warn',
+          basis: '변경허가 기준(' + threshold + '%)에는 못 미치지만 신고 대상 규모입니다.' });
+      }
+      items.push({ icon: '⏱️', label: '신청 시기', value: info.timing, badge: 'neutral', basis: '' });
+    } else {
+      items.push({ icon: '📝', label: '판정', value: '변경신고 대상 — ' + info.label, badge: 'warn', basis: '' });
+      items.push({ icon: '⏱️', label: '신청 시기', value: info.timing, badge: 'neutral', basis: '' });
+    }
+
+    document.getElementById('changeVerdict').innerHTML = items.map(function (it) {
+      return '<div class="verdict ' + it.badge + '">' +
+        '<span class="icon">' + it.icon + '</span>' +
+        '<span class="label">' + it.label + '</span>' +
+        '<span class="value">' + it.value + '</span>' +
+        (it.basis ? '<span class="basis">' + it.basis + '</span>' : '') +
+        '</div>';
+    }).join('');
+
+    document.getElementById('changeNote').innerHTML = '<b>참고용 판정입니다.</b> ' + (note ? note + ' ' : '') + '정확한 적용 여부는 이웨이 주식회사(041-556-0724)로 문의해 주세요.';
+  }
+
+  document.getElementById('changeType').addEventListener('change', renderChange);
+  document.getElementById('rate').addEventListener('input', renderChange);
+  wireSeg('chHap', renderChange);
+  wireSeg('cap', renderChange);
+
+  // ==================== TAB 3-2 (폐수 변경판정) LOGIC ====================
+  var CHANGE_INFO_W = {
+    'same-facility-w': { label: '같은 배출구 시설 증설·교체', usesRate: true },
+    'new-pollutant-w': { label: '배출허용기준 초과 새 오염물질 발생', usesRate: false, always: 'permit', basis: '배출허용기준을 초과하는 새 오염물질 발생으로 시설 개선이 필요한 경우 (근거: 시행령 제31조제3항제2호)' },
+    'zerodischarge-w': { label: '폐수무방류배출시설 고체폐기물 처리방법 변경', usesRate: false, always: 'permit', basis: '허가받은 폐수무방류배출시설의 고체상태 폐기물 처리방법 변경 (근거: 시행령 제31조제3항제3호)' },
+    'minor-w': { label: '명칭·대표자 변경 등 경미한 사항', usesRate: false, always: 'report', basis: '세부 신고 대상·기한은 물환경보전법 시행규칙에 위임되어 있어 이웨이 확인을 권장합니다 (근거: 법 제33조제3항).' },
+  };
+
+  function renderChangeW() {
+    var type = document.getElementById('changeTypeW').value;
+    var info = CHANGE_INFO_W[type];
+    var rate = parseFloat(document.getElementById('rateW').value) || 0;
+    var inc = parseFloat(document.getElementById('incW').value) || 0;
+    var hap = segVal('chHapW');
+    var cap = segVal('capW');
+
+    document.getElementById('rateFieldW').style.display = info.usesRate ? '' : 'none';
+    document.getElementById('incFieldW').style.display = info.usesRate ? '' : 'none';
+    document.getElementById('hapFieldW').style.display = info.usesRate ? '' : 'none';
+    document.getElementById('capFieldW').style.display = info.usesRate ? '' : 'none';
+
+    var items = [];
+
+    if (info.usesRate) {
+      var threshold = hap === 'y' ? 30 : 50;
+      var overThreshold = rate >= threshold || inc >= 700;
+      if (overThreshold) {
+        if (cap === 'y') {
+          items.push({ icon: '✅', label: '판정', value: '변경신고로 갈음 가능', badge: 'warn',
+            basis: '변경허가 기준(' + threshold + '% 또는 700㎥/일)을 넘지만, 공동방지시설·공공처리시설과 협의했고 처리용량 이내 변경이라 신고로 갈음될 수 있습니다 (근거: 시행령 제31조제4항).' });
+        } else {
+          items.push({ icon: '🔺', label: '판정', value: '변경허가 대상', badge: 'critical',
+            basis: '폐수배출량이 ' + threshold + '% 이상 또는 1일 700㎥ 이상 증가 (근거: 물환경보전법 시행령 제31조제3항제1호)' });
+        }
+      } else {
+        items.push({ icon: '📝', label: '판정', value: '변경신고 대상', badge: 'warn',
+          basis: '변경허가 기준(' + threshold + '%, 700㎥/일)에는 못 미치는 증설입니다. 정확한 신고 필요 여부는 시행규칙 확인이 필요합니다.' });
+      }
+    } else if (info.always === 'permit') {
+      items.push({ icon: '🔺', label: '판정', value: '변경허가 대상 — ' + info.label, badge: 'critical', basis: info.basis });
+    } else {
+      items.push({ icon: '📝', label: '판정', value: '변경신고 대상 — ' + info.label, badge: 'warn', basis: info.basis });
+    }
+
+    document.getElementById('changeVerdictW').innerHTML = items.map(function (it) {
+      return '<div class="verdict ' + it.badge + '">' +
+        '<span class="icon">' + it.icon + '</span>' +
+        '<span class="label">' + it.label + '</span>' +
+        '<span class="value">' + it.value + '</span>' +
+        (it.basis ? '<span class="basis">' + it.basis + '</span>' : '') +
+        '</div>';
+    }).join('');
+
+    document.getElementById('changeNoteW').innerHTML = '<b>참고용 판정입니다.</b> 위탁처리·공공처리시설 연계 여부에 따라 결과가 달라질 수 있으니, 정확한 적용 여부는 이웨이 주식회사(041-556-0724)로 문의해 주세요.';
+  }
+
+  document.getElementById('changeTypeW').addEventListener('change', renderChangeW);
+  document.getElementById('rateW').addEventListener('input', renderChangeW);
+  document.getElementById('incW').addEventListener('input', renderChangeW);
+  wireSeg('chHapW', renderChangeW);
+  wireSeg('capW', renderChangeW);
+
+  // ==================== TAB 6 (부지 규제 확인) LOGIC ====================
+  var addrBtn = document.getElementById('addrReqBtn');
+  if (addrBtn) {
+    addrBtn.addEventListener('click', function () {
+      var addr = (document.getElementById('addrInput').value || '').trim();
+      var msg = addr
+        ? '[부지 규제 확인 요청]\n주소: ' + addr + '\n용도지역·용도지구, 지구단위계획구역, 도시계획시설, 농지·산림·가축사육제한구역 등 타 법령 지정사항 확인 부탁드립니다.'
+        : '[부지 규제 확인 요청]\n주소: (주소를 입력해 주세요)\n용도지역·용도지구, 지구단위계획구역, 도시계획시설, 농지·산림·가축사육제한구역 등 타 법령 지정사항 확인 부탁드립니다.';
+      document.getElementById('addrResultText').value = msg;
+      document.getElementById('addrResultWrap').style.display = '';
+      document.getElementById('addrCopyStatus').textContent = '';
+    });
+  }
+  var addrCopyBtn = document.getElementById('addrCopyBtn');
+  if (addrCopyBtn) {
+    addrCopyBtn.addEventListener('click', function () {
+      var text = document.getElementById('addrResultText').value;
+      var statusEl = document.getElementById('addrCopyStatus');
+      try {
+        navigator.clipboard.writeText(text).then(function () {
+          statusEl.textContent = '복사되었습니다.';
+        }).catch(function () {
+          statusEl.textContent = '복사에 실패했습니다 — 직접 선택해 복사해 주세요.';
+        });
+      } catch (e) {
+        statusEl.textContent = '복사에 실패했습니다 — 직접 선택해 복사해 주세요.';
+      }
+    });
+  }
+
+  renderDiag();
+  renderWater();
+  renderChange();
+  renderChangeW();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function (e) {
+      console.warn('SW registration failed', e);
+    });
+  });
+}
+</script>
+</body>
+</html>
