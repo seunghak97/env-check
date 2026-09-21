@@ -338,7 +338,7 @@
           </tbody>
         </table>
       </div>
-      <p class="example-note">1~3종은 굴뚝 자동측정기기(TMS) 부착 대상입니다. 위 측정주기는 TMS 미부착·관제센터 미전송 사업장 기준입니다.</p>
+      <p class="example-note">1~3종은 굴뚝 자동측정기기(TMS) 부착 대상입니다. 위 측정주기는 TMS 미부착·관제센터 미전송 사업장 기준입니다. 특정대기유해물질을 기준 이상 배출하는 4·5종 사업장은 환경기술인도 3종 수준으로 상향됩니다 (근거: 시행령 별표10 비고1).</p>
     </div>
   </div>
 
@@ -846,6 +846,11 @@
 
     // 3) 환경기술인
     var tech = TECH_BY_TYPE[type];
+    var techBasis = '근거: 대기환경보전법 시행령 별표 10';
+    if (hap === 'y' && (type === 4 || type === 5)) {
+      tech = '대기환경산업기사 이상, 또는 3년 이상 관련 경력자 1명 (3종 수준 상향)';
+      techBasis = '특정대기유해물질을 기준 이상 배출하는 4·5종 사업장은 3종 수준 환경기술인을 두어야 합니다 (근거: 시행령 별표10 비고1)';
+    }
 
     // 4) IoT 대상
     var iotBadge, iotText, iotBasis;
@@ -868,7 +873,7 @@
     var items = [
       { icon: '📋', label: '설치 허가·신고', value: permitText, badge: permitBadge, basis: permitBasis },
       { icon: '🗓️', label: '자가측정 주기', value: cycle, badge: 'neutral', basis: cycleBasis },
-      { icon: '🎓', label: '환경기술인 자격기준', value: tech, badge: 'neutral', basis: '근거: 대기환경보전법 시행령 별표 10' },
+      { icon: '🎓', label: '환경기술인 자격기준', value: tech, badge: 'neutral', basis: techBasis },
       { icon: '📡', label: '사물인터넷(IoT) 부착지원', value: iotText, badge: iotBadge, basis: iotBasis },
       { icon: '🏭', label: '굴뚝자동측정기기(TMS)', value: tmsText, badge: tmsBadge, basis: '1~3종은 TMS 부착 대상 (근거: 대기환경보전법 시행령 별표 3)' },
     ];
