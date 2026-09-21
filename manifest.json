@@ -1,6 +1,6 @@
 {
-  "name": "이웨이 사업장 환경진단",
-  "short_name": "환경진단",
+  "name": "환경진단도구",
+  "short_name": "환경진단도구",
   "description": "대기·폐수 배출시설 자가진단 도구 (이웨이 주식회사)",
   "start_url": "./index.html",
   "scope": "./",
